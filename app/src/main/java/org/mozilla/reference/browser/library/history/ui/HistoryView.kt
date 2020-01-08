@@ -7,7 +7,7 @@ import androidx.core.view.isVisible
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.component_history.view.*
-import mozilla.components.support.base.feature.BackHandler
+import mozilla.components.support.base.feature.UserInteractionHandler
 import org.mozilla.reference.browser.R
 import org.mozilla.reference.browser.ext.distinct
 import org.mozilla.reference.browser.library.history.data.HistoryItem
@@ -20,7 +20,7 @@ class HistoryView(
     containerView: ViewGroup,
     private val historyViewModel: HistoryViewModel,
     private val interactor: HistoryInteractor
-) : LibraryPageView(containerView), BackHandler {
+) : LibraryPageView(containerView), UserInteractionHandler {
 
     private var viewMode = ViewMode.Normal
     private var selectedItems = setOf<HistoryItem>()

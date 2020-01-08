@@ -1,6 +1,5 @@
 package org.mozilla.reference.browser.library.history.ui
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -13,7 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.fragment_history.view.*
-import mozilla.components.support.base.feature.BackHandler
+import mozilla.components.support.base.feature.UserInteractionHandler
 import org.mozilla.reference.browser.R
 import org.mozilla.reference.browser.ViewModelFactory
 import org.mozilla.reference.browser.browser.BrowserFragment
@@ -23,18 +22,26 @@ import org.mozilla.reference.browser.library.history.data.HistoryItem
 /**
  * @author Ravjit Uppal
  */
-class HistoryFragment : Fragment(), BackHandler {
+class HistoryFragment : Fragment(), UserInteractionHandler {
 
     private lateinit var historyViewModel: HistoryViewModel
 
     private lateinit var historyView: HistoryView
     private lateinit var historyInteractor: HistoryInteractor
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_history, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         historyViewModel = ViewModelProviders.of(this,
-            ViewModelFactory.getInstance(context.application)).get(HistoryViewModel::class.java)
+            ViewModelFactory.getInstance(requireContext().application)).get(HistoryViewModel::class.java)
 
         historyInteractor = HistoryInteractor(
             historyViewModel,
@@ -42,6 +49,8 @@ class HistoryFragment : Fragment(), BackHandler {
             ::deleteAll,
             ::onBackPressed
         )
+
+        historyView = HistoryView(view.history_layout, historyViewModel, historyInteractor)
 
         historyViewModel.getHistoryItems().observe(this, Observer { historyList ->
             historyView.updateEmptyState(userHasHistory = historyList.isNotEmpty())
@@ -56,16 +65,6 @@ class HistoryFragment : Fragment(), BackHandler {
             }
             historyView.update(historyViewModel.viewMode, it)
         })
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_history, container, false)
-        historyView = HistoryView(view.history_layout, historyViewModel, historyInteractor)
-        return view
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
