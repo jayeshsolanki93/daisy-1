@@ -220,4 +220,6 @@
     <string name="addon_permissions_dialog_add">Add</string>
     <string name="addon_permissions_dialog_cancel">Cancel</string>
     <string name="delete">Delete</string>
+
+    <string name="navigate_up_content_desc" translatable="false">Navigate Up</string>
 </resources>

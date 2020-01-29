@@ -52,11 +52,10 @@ class HistoryView(
         view.toolbar.inflateMenu(layout)
     }
 
-    @SuppressLint("PrivateResource")
     private fun setupToolbarListeners() {
         with(view.toolbar) {
             setNavigationIcon(R.drawable.mozac_ic_back)
-            setNavigationContentDescription(R.string.abc_action_bar_up_description)
+            setNavigationContentDescription(R.string.navigate_up_content_desc)
             setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.close -> {
